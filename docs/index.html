@@ -19,11 +19,16 @@
 </body>
 <script>
     function pay() {
+        const encodeFormData = (data) => {
+            return Object.keys(data)
+                .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
+                .join('&');
+        }
         const amount = document.getElementById('amount')
         const metadata = document.getElementById('metadata')
         const secret = document.getElementById('secret')
         console.log('paying', amount.value)
-        const data = { amount, currency: 'myr', payment_method_types: ['card'], confirm: true, metadata:JSON.parse(metadata.value),description:'github' };
+        const payload = { amount, currency: 'myr', payment_method_types: ['card'], confirm: true, metadata: JSON.parse(metadata.value), description: 'github' };
 
         fetch('https://api.stripe.com/v1/payment_intents', {
             method: 'POST',
@@ -31,7 +36,7 @@
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'Authorization': 'Bearer ' + secret.value
             },
-            body: JSON.stringify(data),
+            body: encodeFormData(payload),
         })
             .then(response => response.json())
             .then(data => {
