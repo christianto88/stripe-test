@@ -19,7 +19,7 @@
 </body>
 <script>
     function load() {
-        console.log('version : ', 7)
+        console.log('version :', 8)
     }
     async function pay() {
         const encodeFormData = (data) => {
@@ -68,7 +68,7 @@
                 },
                 body: encodeFormData(pmPayload),
             })
-            pmResponse = pmResponse.json()
+            pmResponse = await pmResponse.json()
             console.log('PM Success', pmResponse)
         } catch (error) {
             console.log('PM Error', error);
@@ -84,7 +84,7 @@
                 },
                 body: encodeFormData({ ...piPayload, payment_method: pmResponse.id }),
             })
-            piResponse = piResponse.json()
+            piResponse = await piResponse.json()
             console.log('PI Success:', piResponse);
 
         } catch (error) {
