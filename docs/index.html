@@ -19,7 +19,7 @@
 </body>
 <script>
     function load() {
-        console.log('version : ', 6)
+        console.log('version : ', 7)
     }
     async function pay() {
         const encodeFormData = (data) => {
@@ -45,11 +45,10 @@
         // payload.append('payment_method[type]','card')
         // payload.append('payment_method[card][exp_month]',8)
         const pmPayload = {
-            'type': card,
+            'type': 'card',
             'card[exp_month]': '8',
             'card[exp_year]': '2021',
             'card[number]': '4242424242424242',
-            'card[type]': 'card',
             'card[cvc]': 123,
         }
         const piPayload = {
