@@ -19,7 +19,7 @@
 </body>
 <script>
     function load() {
-        console.log('version : ', 5)
+        console.log('version : ', 6)
     }
     async function pay() {
         const encodeFormData = (data) => {
@@ -44,36 +44,53 @@
         // payload.append('payment_method[card][cvc]',123)
         // payload.append('payment_method[type]','card')
         // payload.append('payment_method[card][exp_month]',8)
-
-        const payload = {
+        const pmPayload = {
+            'type': card,
+            'card[exp_month]': '8',
+            'card[exp_year]': '2021',
+            'card[number]': '4242424242424242',
+            'card[type]': 'card',
+            'card[cvc]': 123,
+        }
+        const piPayload = {
             amount: parseInt(amount.value, 10),
             currency: 'myr',
             'payment_method_types[]': 'card',
             confirm: true,
             'metadata[my-data]': 'metadata',
             description: 'github',
-            'payment_method[card][exp_month]': 8,
-            'payment_method[card][exp_year]': 2021,
-            'payment_method[card][number]': '4242424242424242',
-            'payment_method[type]': 'card',
-            'payment_method[card][cvc]': 123,
         };
-
-        fetch('https://api.stripe.com/v1/payment_intents', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Authorization': 'Bearer ' + secret.value
-            },
-            body: encodeFormData(payload),
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
+        try {
+            let pmResponse = await fetch('https://api.stripe.com/v1/payment_methods', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Authorization': 'Bearer ' + secret.value
+                },
+                body: encodeFormData(pmPayload),
             })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+            pmResponse = pmResponse.json()
+            console.log('PM Success', pmResponse)
+        } catch (error) {
+            console.log('PM Error', error);
+        }
+
+
+        try {
+            let piResponse = await fetch('https://api.stripe.com/v1/payment_intents', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Authorization': 'Bearer ' + secret.value
+                },
+                body: encodeFormData({ ...piPayload, payment_method: pmResponse.id }),
+            })
+            piResponse = piResponse.json()
+            console.log('PI Success:', piResponse);
+
+        } catch (error) {
+            console.log('PI Error', error);
+        }
     }
     function checkout() {
         const session = document.getElementById('sessionId')
