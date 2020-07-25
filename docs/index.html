@@ -17,10 +17,13 @@
             // instead of the {{CHECKOUT_SESSION_ID}} placeholder.
             sessionId: 'cs_test_2WjdL8O5DnExs93VWLgmubNSvYwYxtT9Wk9VcWmW939OaSy3VxcS7Ot9'
         }).then(function (result) {
+            console.log('then')
             // If `redirectToCheckout` fails due to a browser or network
             // error, display the localized error message to your customer
             // using `result.error.message`.
-        });
+        }).catch(function (err) {
+            console.log('catch', err)
+        })
     }
 </script>
 
