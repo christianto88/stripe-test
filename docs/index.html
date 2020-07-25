@@ -5,25 +5,28 @@
 </head>
 
 <body onload="myFunction()">
-    <h1>Stripe</h1>
 </body>
 <script>
     function myFunction() {
-        var stripe = Stripe('pk_test_51H4UioKjrP4l6S2KOOpGF6ll3hfKEABXFKhM9A0vIaAr1wgMuyQ5ypGB4dJe9rlsoAsL2GaHLaFd6bscV7luCD6G00O8XNsT8l');
+        var urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('sessionId')
+        if (id) {
+            var stripe = Stripe('pk_test_51H4UioKjrP4l6S2KOOpGF6ll3hfKEABXFKhM9A0vIaAr1wgMuyQ5ypGB4dJe9rlsoAsL2GaHLaFd6bscV7luCD6G00O8XNsT8l');
 
-        stripe.redirectToCheckout({
-            // Make the id field from the Checkout Session creation API response
-            // available to this file, so you can provide it as argument here
-            // instead of the {{CHECKOUT_SESSION_ID}} placeholder.
-            sessionId: 'cs_test_dLlw1FF6wHUlQdQiUa3lVtsLlsHO5L4anq0tY0ulyGmYjU6rk5GinpwZ'
-        }).then(function (result) {
-            console.log('then')
-            // If `redirectToCheckout` fails due to a browser or network
-            // error, display the localized error message to your customer
-            // using `result.error.message`.
-        }).catch(function (err) {
-            console.log('catch', err)
-        })
+            stripe.redirectToCheckout({
+                // Make the id field from the Checkout Session creation API response
+                // available to this file, so you can provide it as argument here
+                // instead of the {{CHECKOUT_SESSION_ID}} placeholder.
+                sessionId: id
+            }).then(function (result) {
+                console.log('then')
+                // If `redirectToCheckout` fails due to a browser or network
+                // error, display the localized error message to your customer
+                // using `result.error.message`.
+            }).catch(function (err) {
+                console.log('catch', err)
+            })
+        }
     }
 </script>
 
