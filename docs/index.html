@@ -28,7 +28,7 @@
         const metadata = document.getElementById('metadata')
         const secret = document.getElementById('secret')
         console.log('paying', amount.value)
-        const payload = { amount, currency: 'myr', payment_method_types: ['card'], confirm: true, metadata: JSON.parse(metadata.value), description: 'github' };
+        const payload = { amount, currency: 'myr', 'payment_method_types[]': 'card', confirm: true, metadata: JSON.parse(metadata.value), description: 'github' };
 
         fetch('https://api.stripe.com/v1/payment_intents', {
             method: 'POST',
