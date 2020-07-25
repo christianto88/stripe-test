@@ -21,7 +21,7 @@
     function load() {
         console.log('version : ', 5)
     }
-    function pay() {
+    async function pay() {
         const encodeFormData = (data) => {
             return Object.keys(data)
                 .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
@@ -31,19 +31,33 @@
         const metadata = document.getElementById('metadata')
         const secret = document.getElementById('secret')
         console.log('paying', amount.value)
-        const payload = new URLSearchParams()
-        payload.append('amount', parseInt(amount.value, 10))
-        payload.append('currency', 'myr')
-        payload.append('payment_method_types[]', 'card')
-        payload.append('confirm', true)
-        payload.append('metadata[my-data]', 'metadata')
-        payload.append('description', 'github')
-        payload.append('payment_method[card][exp_month]', 8)
-        payload.append('payment_method[card][exp_year]', 2021)
-        payload.append('payment_method[card][number]', '4242424242424242')
-        payload.append('payment_method[card][cvc]', 123)
-        payload.append('payment_method[type]', 'card')
+        // const payload=new URLSearchParams()
+        // payload.append('amount',parseInt(amount.value, 10))
+        // payload.append('currency','myr')
+        // payload.append('payment_method_types[]','card')
+        // payload.append('confirm',true)
+        // payload.append('metadata[my-data]','metadata')
+        // payload.append('description','github')
+        // payload.append('payment_method[card][exp_month]',8)
+        // payload.append('payment_method[card][exp_year]',2021)
+        // payload.append('payment_method[card][number]','4242424242424242')
+        // payload.append('payment_method[card][cvc]',123)
+        // payload.append('payment_method[type]','card')
+        // payload.append('payment_method[card][exp_month]',8)
 
+        const payload = {
+            amount: parseInt(amount.value, 10),
+            currency: 'myr',
+            'payment_method_types[]': 'card',
+            confirm: true,
+            'metadata[my-data]': 'metadata',
+            description: 'github',
+            'payment_method[card][exp_month]': 8,
+            'payment_method[card][exp_year]': 2021,
+            'payment_method[card][number]': '4242424242424242',
+            'payment_method[type]': 'card',
+            'payment_method[card][cvc]': 123,
+        };
 
         fetch('https://api.stripe.com/v1/payment_intents', {
             method: 'POST',
@@ -51,7 +65,7 @@
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'Authorization': 'Bearer ' + secret.value
             },
-            body: payload.toString(),
+            body: encodeFormData(payload),
         })
             .then(response => response.json())
             .then(data => {
