@@ -19,7 +19,7 @@
 </body>
 <script>
     function load(){
-        console.log('version : ',1)
+        console.log('version : ',2)
     }
     function pay() {
         const encodeFormData = (data) => {
@@ -31,7 +31,7 @@
         const metadata = document.getElementById('metadata')
         const secret = document.getElementById('secret')
         console.log('paying', amount.value)
-        const payload = { amount:parseInt(amount.value,10), currency: 'myr', 'payment_method_types[]': 'card', confirm: true, metadata: JSON.parse(metadata.value), description: 'github' };
+        const payload = { amount:parseInt(amount.value,10), currency: 'myr', 'payment_method_types[]': 'card', confirm: true, 'metadata[my-data]':'metadata', description: 'github' };
 
         fetch('https://api.stripe.com/v1/payment_intents', {
             method: 'POST',
