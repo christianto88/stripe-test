@@ -1,0 +1,27 @@
+<html>
+
+<head>
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+
+<body>
+    <h1>Stripe</h1>
+</body>
+<script>
+    function myFunction() {
+        var stripe = Stripe('pk_test_51H4UioKjrP4l6S2KOOpGF6ll3hfKEABXFKhM9A0vIaAr1wgMuyQ5ypGB4dJe9rlsoAsL2GaHLaFd6bscV7luCD6G00O8XNsT8l');
+
+        stripe.redirectToCheckout({
+            // Make the id field from the Checkout Session creation API response
+            // available to this file, so you can provide it as argument here
+            // instead of the {{CHECKOUT_SESSION_ID}} placeholder.
+            sessionId: 'cs_test_2WjdL8O5DnExs93VWLgmubNSvYwYxtT9Wk9VcWmW939OaSy3VxcS7Ot9'
+        }).then(function (result) {
+            // If `redirectToCheckout` fails due to a browser or network
+            // error, display the localized error message to your customer
+            // using `result.error.message`.
+        });
+    }
+</script>
+
+</html>
